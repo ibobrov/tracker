@@ -1,4 +1,4 @@
-package i.bobrov.tracker;
+package i.bobrov.tracker.io;
 
 public interface Input {
 
