@@ -11,6 +11,7 @@ public class StartUITest {
     private Tracker tracker = new Tracker();
     private Output out = new StubOutput();
     private final StartUI ustartUI = new StartUI(out);
+    private final String ln =  System.lineSeparator();
 
     @AfterEach
     public void cleanUp() {
@@ -76,8 +77,107 @@ public class StartUITest {
         };
         new StartUI(out).init(in, tracker, actions);
         assertThat(out.toString()).isEqualTo(
-                "Menu." + System.lineSeparator()
-                        + "0. Exit Program" + System.lineSeparator()
+                "Menu:" + ln
+                        + "0. Exit Program" + ln
+        );
+    }
+
+    @Test
+    public void whenReplaceItemTestOutputIsSuccessfully() {
+        Item one = tracker.add(new Item("test1"));
+        String replaceName = "New Test Name";
+        Input in = new StubInput(
+                new String[] {"0", String.valueOf(one.getId()), replaceName, "1"}
+        );
+        UserAction[] actions = new UserAction[]{
+                new ReplaceAction(out),
+                new Exit()
+        };
+        ustartUI.init(in, tracker, actions);
+        assertThat(out.toString()).isEqualTo(
+                "Menu:" + ln
+                        + "0. Edit item" + ln
+                        + "1. Exit Program" + ln
+                        + "=== Edit item ===" + ln
+                        + "Заявка изменена успешно." + ln
+                        + "Menu:" + ln
+                        + "0. Edit item" + ln
+                        + "1. Exit Program" + ln
+        );
+    }
+
+    @Test
+    public void whenShowAllItemsTestOutputIsSuccessfully() {
+        Item one = tracker.add(new Item("test1"));
+        Item two = tracker.add(new Item("test2"));
+        Input in = new StubInput(
+                new String[] {"0", "1"}
+        );
+        UserAction[] actions = new UserAction[]{
+                new ShowAllItems(out),
+                new Exit()
+        };
+        ustartUI.init(in, tracker, actions);
+        assertThat(out.toString()).isEqualTo(
+                "Menu:" + ln
+                        + "0. Show all items" + ln
+                        + "1. Exit Program" + ln
+                        + "=== Show all items ===" + ln
+                        + one + ln
+                        + two + ln
+                        + "Menu:" + ln
+                        + "0. Show all items" + ln
+                        + "1. Exit Program" + ln
+        );
+    }
+
+    @Test
+    public void whenFindByIdTestOutputIsSuccessfully() {
+        tracker.add(new Item("test1"));
+        Item two = tracker.add(new Item("test2"));
+        Input in = new StubInput(
+                new String[] {"0", String.valueOf(two.getId()), "1"}
+        );
+        UserAction[] actions = new UserAction[]{
+                new FindById(out),
+                new Exit()
+        };
+        ustartUI.init(in, tracker, actions);
+        assertThat(out.toString()).isEqualTo(
+                "Menu:" + ln
+                        + "0. Find item by id" + ln
+                        + "1. Exit Program" + ln
+                        + "=== Find item by id ===" + ln
+                        + two + ln
+                        + "Menu:" + ln
+                        + "0. Find item by id" + ln
+                        + "1. Exit Program" + ln
+        );
+    }
+
+    @Test
+    public void whenFindByNameTestOutputIsSuccessfully() {
+        tracker.add(new Item("test1"));
+        Item two = tracker.add(new Item("test2"));
+        Item three = tracker.add(new Item("test2"));
+        Input in = new StubInput(
+                new String[] {"0", two.getName(), "1"}
+        );
+        UserAction[] actions = new UserAction[]{
+                new FindByName(out),
+                new Exit()
+        };
+        ustartUI.init(in, tracker, actions);
+        assertThat(out.toString()).isEqualTo(
+                "Menu:" + ln
+                        + "0. Find items by name" + ln
+                        + "1. Exit Program" + ln
+                        + "=== Find items by name ===" + ln
+                        + two + ln
+                        + three + ln
+                        + "Menu:" + ln
+                        + "0. Find items by name" + ln
+                        + "1. Exit Program" + ln
         );
     }
 }
