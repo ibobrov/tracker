@@ -1,10 +1,7 @@
 package i.bobrov.tracker.console;
 
-import i.bobrov.tracker.io.ConsoleOutput;
-import i.bobrov.tracker.io.Input;
-import i.bobrov.tracker.io.ConsoleInput;
+import i.bobrov.tracker.io.*;
 import i.bobrov.tracker.Tracker;
-import i.bobrov.tracker.io.Output;
 
 public class StartUI {
     private final Output out;
@@ -31,9 +28,9 @@ public class StartUI {
     }
 
     public static void main(String[] args) {
-        Input input = new ConsoleInput();
         Tracker tracker = new Tracker();
         Output out = new ConsoleOutput();
+        Input input = new ValidateInput(out, new ConsoleInput());
         UserAction[] actions = {
                 new CreateAction(out),
                 new ShowAllItems(out),
