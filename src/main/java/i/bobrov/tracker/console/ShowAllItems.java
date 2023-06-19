@@ -5,6 +5,8 @@ import i.bobrov.tracker.Tracker;
 import i.bobrov.tracker.io.Input;
 import i.bobrov.tracker.io.Output;
 
+import java.util.List;
+
 public class ShowAllItems implements UserAction {
     private final Output out;
 
@@ -20,8 +22,8 @@ public class ShowAllItems implements UserAction {
     @Override
     public boolean execute(Input input, Tracker tracker) {
         out.println("=== Show all items ===");
-        Item[] items = tracker.findAll();
-        if (items.length > 0) {
+        List<Item> items = tracker.findAll();
+        if (items.size() > 0) {
             for (Item item : items) {
                 out.println(item);
             }

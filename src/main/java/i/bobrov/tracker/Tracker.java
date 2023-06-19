@@ -1,67 +1,56 @@
 package i.bobrov.tracker;
 
-import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Tracker {
-    private final Item[] items = new Item[100];
-    private int ids = 1;
-    private int size = 0;
+    private final List<Item> items = new ArrayList<>();
 
     public Item add(Item item) {
         if (item != null) {
-            item.setId(ids++);
-            items[size++] = item;
+            int id = items.size();
+            item.setId(id);
+            items.add(id, item);
         }
         return item;
     }
 
-    public Item[] findAll() {
-        return Arrays.copyOf(items, size);
+    public List<Item> findAll() {
+        return new ArrayList<>(items);
     }
 
-    public Item[] findByName(String key) {
-        Item[] result = new Item[size];
-        int size = 0;
+    public List<Item> findByName(String key) {
+        List<Item> rsl = new ArrayList<>();
         for (Item i : items) {
             if (i != null && key.equals(i.getName())) {
-                result[size++] = i;
+                rsl.add(i);
             }
         }
-        return Arrays.copyOf(result, size);
+        return rsl;
     }
 
     public Item findById(int id) {
-        int index = indexOf(id);
-        return index != -1 ? items[index] : null;
+        return id >= 0 && id < items.size() ? items.get(id) : null;
     }
 
     public boolean replace(int id, Item item) {
-        int index = indexOf(id);
-        boolean rsl = index != -1 && item != null;
+        boolean rsl = item != null && deleteAndCorrectIds(id, false);
         if (rsl) {
             item.setId(id);
-            items[index] = item;
+            items.add(id, item);
         }
         return rsl;
     }
 
     public boolean delete(int id) {
-        int index = indexOf(id);
-        boolean rsl = index != -1;
-        if (rsl) {
-            System.arraycopy(items, index + 1, items, index, size - index - 1);
-            items[size - 1] = null;
-            size--;
-        }
-        return rsl;
+        return deleteAndCorrectIds(id, true);
     }
 
-    private int indexOf(int id) {
-        int rsl = -1;
-        for (int index = 0; index < size; index++) {
-            if (items[index].getId() == id) {
-                rsl = index;
-                break;
+    private boolean deleteAndCorrectIds(int id, boolean isCorrect) {
+        boolean rsl = findById(id) != null && items.remove(id) != null;
+        if (isCorrect && rsl) {
+            for (int i = id; i < items.size(); i++) {
+                items.get(i).setId(i);
             }
         }
         return rsl;
