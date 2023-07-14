@@ -1,21 +1,22 @@
 package i.bobrov.tracker.console;
 
-import i.bobrov.tracker.*;
 import i.bobrov.tracker.io.*;
 
+import i.bobrov.tracker.model.Item;
+import i.bobrov.tracker.store.MemTracker;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StartUITest {
-    private Tracker tracker = new Tracker();
+    private MemTracker tracker = new MemTracker();
     private Output out = new StubOutput();
     private final StartUI ustartUI = new StartUI(out);
     private final String ln =  System.lineSeparator();
 
     @AfterEach
     public void cleanUp() {
-        tracker = new Tracker();
+        tracker = new MemTracker();
         out = new StubOutput();
     }
 

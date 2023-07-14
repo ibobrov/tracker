@@ -1,7 +1,8 @@
 package i.bobrov.tracker.console;
 
 import i.bobrov.tracker.io.*;
-import i.bobrov.tracker.Tracker;
+import i.bobrov.tracker.store.SqlTracker;
+import i.bobrov.tracker.store.Store;
 
 public class StartUI {
     private final Output out;
@@ -17,7 +18,7 @@ public class StartUI {
         }
     }
 
-    public void init(Input input, Tracker tracker, UserAction[] actions) {
+    public void init(Input input, Store tracker, UserAction[] actions) {
         boolean run = true;
         while (run) {
             showMenu(actions);
@@ -31,20 +32,21 @@ public class StartUI {
         }
     }
 
-    public static void main(String[] args) {
-        Tracker tracker = new Tracker();
-        Output out = new ConsoleOutput();
-        Input input = new ValidateInput(out, new ConsoleInput());
-        UserAction[] actions = {
-                new CreateAction(out),
-                new ShowAllItems(out),
-                new ReplaceAction(out),
-                new DeleteAction(out),
-                new FindById(out),
-                new FindByName(out),
-                new Exit()
-        };
-        new StartUI(out)
-                .init(input, tracker, actions);
+    public static void main(String[] args) throws Exception {
+        try (Store tracker = new SqlTracker()) {
+            Output out = new ConsoleOutput();
+            Input input = new ValidateInput(out, new ConsoleInput());
+            UserAction[] actions = {
+                    new CreateAction(out),
+                    new ShowAllItems(out),
+                    new ReplaceAction(out),
+                    new DeleteAction(out),
+                    new FindById(out),
+                    new FindByName(out),
+                    new Exit()
+            };
+            new StartUI(out)
+                    .init(input, tracker, actions);
+        }
     }
 }

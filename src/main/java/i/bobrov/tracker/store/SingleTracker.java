@@ -1,10 +1,12 @@
-package i.bobrov.tracker;
+package i.bobrov.tracker.store;
+
+import i.bobrov.tracker.model.Item;
 
 import java.util.List;
 
 public final class SingleTracker {
     private static SingleTracker instance = null;
-    private static final Tracker tracker = new Tracker();
+    private static final MemTracker tracker = new MemTracker();
 
     private SingleTracker() {
     }

@@ -1,9 +1,9 @@
 package i.bobrov.tracker.console;
 
-import i.bobrov.tracker.Item;
-import i.bobrov.tracker.Tracker;
+import i.bobrov.tracker.model.Item;
 import i.bobrov.tracker.io.Input;
 import i.bobrov.tracker.io.Output;
+import i.bobrov.tracker.store.Store;
 
 public class CreateAction implements UserAction {
     private final Output out;
@@ -18,11 +18,11 @@ public class CreateAction implements UserAction {
     }
 
     @Override
-    public boolean execute(Input input, Tracker tracker) {
+    public boolean execute(Input input, Store store) {
         out.println("=== Create a new Item ===");
         String name = input.askStr("Enter name: ");
         Item item = new Item(name);
-        tracker.add(item);
+        store.add(item);
         out.println("Добавленная заявка: " + item);
         return true;
     }

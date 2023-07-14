@@ -1,9 +1,9 @@
 package i.bobrov.tracker.console;
 
-import i.bobrov.tracker.Item;
-import i.bobrov.tracker.Tracker;
+import i.bobrov.tracker.model.Item;
 import i.bobrov.tracker.io.Input;
 import i.bobrov.tracker.io.Output;
+import i.bobrov.tracker.store.Store;
 
 import java.util.Objects;
 
@@ -20,10 +20,10 @@ public class FindById implements UserAction {
     }
 
     @Override
-    public boolean execute(Input input, Tracker tracker) {
+    public boolean execute(Input input, Store store) {
         out.println("=== Find item by id ===");
         int id = input.askInt("Enter id: ");
-        Item item = tracker.findById(id);
+        Item item = store.findById(id);
         out.println(Objects.requireNonNullElseGet(
                 item,
                 () -> "Заявка с введенным id: " + id + " не найдена."));

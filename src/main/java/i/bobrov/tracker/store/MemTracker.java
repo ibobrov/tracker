@@ -1,11 +1,14 @@
-package i.bobrov.tracker;
+package i.bobrov.tracker.store;
+
+import i.bobrov.tracker.model.Item;
 
 import java.util.List;
 import java.util.ArrayList;
 
-public class Tracker {
+public class MemTracker implements Store {
     private final List<Item> items = new ArrayList<>();
 
+    @Override
     public Item add(Item item) {
         if (item != null) {
             int id = items.size();
@@ -15,10 +18,12 @@ public class Tracker {
         return item;
     }
 
+    @Override
     public List<Item> findAll() {
         return new ArrayList<>(items);
     }
 
+    @Override
     public List<Item> findByName(String key) {
         List<Item> rsl = new ArrayList<>();
         for (Item i : items) {
@@ -29,10 +34,12 @@ public class Tracker {
         return rsl;
     }
 
+    @Override
     public Item findById(int id) {
         return id >= 0 && id < items.size() ? items.get(id) : null;
     }
 
+    @Override
     public boolean replace(int id, Item item) {
         boolean rsl = item != null && deleteAndCorrectIds(id, false);
         if (rsl) {
@@ -42,6 +49,7 @@ public class Tracker {
         return rsl;
     }
 
+    @Override
     public boolean delete(int id) {
         return deleteAndCorrectIds(id, true);
     }
@@ -54,5 +62,9 @@ public class Tracker {
             }
         }
         return rsl;
+    }
+
+    @Override
+    public void close() {
     }
 }
